@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  labels:
+    app: socialmedia-app
+  name: socialmedia-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: socialmedia-app
+  template:
+    metadata:
+      labels:
+        app: socialmedia-app
+    spec:
+      containers:
+      - image: nginx:1.23.0
+        name: nginx
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+            - name: nginx-index-file
+              mountPath: /usr/share/nginx/html/
+      # create volume to host nginx homehtml page    
+      volumes:
+      - name: nginx-index-file
+        configMap:
+          name: socialmedia-configmap
